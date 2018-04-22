@@ -6,6 +6,7 @@ import tw.core.exception.OutOfRangeAnswerException;
 import tw.core.generator.AnswerGenerator;
 import tw.core.generator.RandomIntGenerator;
 import tw.core.model.GuessResult;
+import tw.core.model.Record;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -21,12 +22,17 @@ import static org.mockito.Mockito.*;
 
 public class GameTest {
     private Game game;
+    private Answer inputAnswer;
     @Before
     public void setup() {
+        inputAnswer = mock(Answer.class);
+
+        Record record = mock(Record.class);
+        when(record.getValue()).thenReturn(new int[]{0, 4});
         try {
             AnswerGenerator answerGenerator = mock(AnswerGenerator.class);
-            Answer answer = new Answer();
-            answer.setNumList(Arrays.asList("1","2","3","4"));
+            Answer answer = mock(Answer.class);
+            when(answer.check(inputAnswer)).thenReturn(record);
             when(answerGenerator.generate()).thenReturn(answer);
             game = new Game(answerGenerator);
             assertTrue(true);
@@ -37,8 +43,6 @@ public class GameTest {
     @Test
     //测试guess方法
     public void testGuess() {
-        Answer inputAnswer = new Answer();
-        inputAnswer.setNumList(Arrays.asList("1", "2", "3", "4"));
         GuessResult guess = game.guess(inputAnswer);
         assertEquals(guess.getInputAnswer(),inputAnswer);
 
