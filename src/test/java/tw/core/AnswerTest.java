@@ -47,4 +47,16 @@ public class AnswerTest {
         }
     }
 
+    @Test
+    public void testCheck() {
+        Answer answer = new Answer();
+        answer.setNumList(Arrays.asList("1","2","3","4"));
+
+        Answer inputAnswer = new Answer();
+        inputAnswer.setNumList(Arrays.asList("0","3","2","4"));
+        Record record = answer.check(inputAnswer);
+        int[] result = {1, 2};
+        assertArrayEquals(record.getValue(),result);
+    }
+
 }
