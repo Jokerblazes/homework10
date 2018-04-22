@@ -23,5 +23,28 @@ public class AnswerTest {
         assertEquals(answer.getIndexOfNum("1"),-1);
     }
 
-   
+    @Test
+    public void testValidateSuccess() {
+        Answer answer = new Answer();
+        answer.setNumList(Arrays.asList("3","4","5","6"));
+        try {
+            answer.validate();
+            assertTrue(true);
+        } catch (OutOfRangeAnswerException e) {
+            assertTrue(false);
+        }
+    }
+
+    @Test
+    public void testValidateFail() {
+        Answer answer = new Answer();
+        answer.setNumList(Arrays.asList("3","4","3","6"));
+        try {
+            answer.validate();
+            assertTrue(false);
+        } catch (OutOfRangeAnswerException e) {
+            assertTrue(true);
+        }
+    }
+
 }
