@@ -23,15 +23,16 @@ import static org.mockito.Mockito.*;
 public class GameTest {
     private Game game;
     private Answer inputAnswer;
+    private Answer answer;
     @Before
     public void setup() {
         inputAnswer = mock(Answer.class);
 
         Record record = mock(Record.class);
-        when(record.getValue()).thenReturn(new int[]{0, 4});
+        when(record.getValue()).thenReturn(new int[]{4, 0});
         try {
             AnswerGenerator answerGenerator = mock(AnswerGenerator.class);
-            Answer answer = mock(Answer.class);
+            answer = mock(Answer.class);
             when(answer.check(inputAnswer)).thenReturn(record);
             when(answerGenerator.generate()).thenReturn(answer);
             game = new Game(answerGenerator);
@@ -50,5 +51,27 @@ public class GameTest {
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(guess.getResult());
         assertTrue(m.matches());
+    }
+
+    @Test
+    public void testCheckStatusContinue() {
+        assertEquals(game.checkStatus(),GameStatus.CONTINUE);
+    }
+
+    @Test
+    public void testCheckStatusFail() {
+        game.guess(inputAnswer);
+        game.guess(inputAnswer);
+        game.guess(inputAnswer);
+        game.guess(inputAnswer);
+        game.guess(inputAnswer);
+        game.guess(inputAnswer);
+        assertEquals(game.checkStatus(),GameStatus.FAIL);
+    }
+
+    @Test
+    public void testCheckStatusSuccess() {
+        game.guess(inputAnswer);
+        assertEquals(game.checkStatus(),GameStatus.SUCCESS);
     }
 }
